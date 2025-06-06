@@ -3,24 +3,24 @@ const express = require('express');
 const app = express();
 const path = require('path');
 
-// Serve static assets
+// 1. Serve static assets
 app.use('/public', express.static(__dirname + '/public'));
 
-// Logger middleware
+// 2. Logger middleware
 app.use(function (req, res, next) {
   console.log(`${req.method} ${req.path} - ${req.ip}`);
   next();
 });
 
-// /now route with chained middleware
-app.get('/now', function (req, res, next) {
-  req.time = new Date().toString();
+// 3. /now route with chained middleware
+app.get('/now', (req, res, next) => {
+  req.time = new Date().toString(); // capture current time
   next();
-}, function (req, res) {
-  res.json({ time: req.time });
+}, (req, res) => {
+  res.json({ time: req.time }); // respond with the time
 });
 
-// /json route
+// 4. /json route with env-based formatting
 app.get('/json', function (req, res) {
   let message = "Hello json";
   if (process.env.MESSAGE_STYLE === "uppercase") {
@@ -29,9 +29,10 @@ app.get('/json', function (req, res) {
   res.json({ message: message });
 });
 
-// Root route
+// 5. Root route serving index.html
 app.get('/', function (req, res) {
   res.sendFile(path.join(__dirname, 'views', 'index.html'));
 });
 
+// 6. Export the app
 module.exports = app;
