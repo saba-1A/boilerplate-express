@@ -13,11 +13,11 @@ app.use(function (req, res, next) {
 });
 
 // /now route with chained middleware
-app.get('/now', (req, res, next) => {
+app.get('/now', function (req, res, next) {
   req.time = new Date().toString();
   next();
-}, (req, res) => {
-  res.json({ time: req.time }); //  Use res.json instead of res.send(JSON.stringify(...))
+}, function (req, res) {
+  res.json({ time: req.time });
 });
 
 // /json route
@@ -31,7 +31,7 @@ app.get('/json', function (req, res) {
 
 // Root route
 app.get('/', function (req, res) {
-  res.sendFile(__dirname + '/views/index.html');
+  res.sendFile(path.join(__dirname, 'views', 'index.html'));
 });
 
 module.exports = app;
