@@ -3,36 +3,39 @@ const express = require('express');
 const app = express();
 const path = require('path');
 
-// 1. Serve static assets
-app.use('/public', express.static(__dirname + '/public'));
+// 1. Serve static assets from /public
+app.use('/public', express.static(path.join(__dirname, 'public')));
 
-// 2. Logger middleware
-app.use(function (req, res, next) {
+// 2. Logger middleware (root-level)
+app.use((req, res, next) => {
   console.log(`${req.method} ${req.path} - ${req.ip}`);
   next();
 });
 
-// 3. /now route with chained middleware
-app.get('/now', (req, res, next) => {
-  req.time = new Date().toString(); // capture current time
-  next();
-}, (req, res) => {
-  res.json({ time: req.time }); // respond with the time
-});
+// 3. /now route with chained middleware (current time)
+app.get('/now',
+  (req, res, next) => {
+    req.time = new Date().toString();
+    next();
+  },
+  (req, res) => {
+    res.json({ time: req.time });
+  }
+);
 
-// 4. /json route with env-based formatting
-app.get('/json', function (req, res) {
+// 4. /json route influenced by MESSAGE_STYLE env var
+app.get('/json', (req, res) => {
   let message = "Hello json";
   if (process.env.MESSAGE_STYLE === "uppercase") {
     message = message.toUpperCase();
   }
-  res.json({ message: message });
+  res.json({ message });
 });
 
-// 5. Root route serving index.html
-app.get('/', function (req, res) {
+// 5. Root route serving the HTML page
+app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'views', 'index.html'));
 });
 
-// 6. Export the app
+// Export the app
 module.exports = app;
