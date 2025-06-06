@@ -7,7 +7,7 @@ const path = require('path');
 app.use('/public', express.static(__dirname + '/public'));
 
 // Logger middleware
-app.use(function(req, res, next) {
+app.use(function (req, res, next) {
   console.log(`${req.method} ${req.path} - ${req.ip}`);
   next();
 });
@@ -17,11 +17,12 @@ app.get('/now', (req, res, next) => {
   req.time = new Date().toString();
   next();
 }, (req, res) => {
-  res.json({ time: req.time });
+  res.setHeader('Content-Type', 'application/json');
+  res.send(JSON.stringify({ time: req.time }));
 });
 
 // /json route
-app.get('/json', function(req, res) {
+app.get('/json', function (req, res) {
   let message = "Hello json";
   if (process.env.MESSAGE_STYLE === "uppercase") {
     message = message.toUpperCase();
@@ -30,7 +31,7 @@ app.get('/json', function(req, res) {
 });
 
 // Root route
-app.get('/', function(req, res) {
+app.get('/', function (req, res) {
   res.sendFile(__dirname + '/views/index.html');
 });
 
