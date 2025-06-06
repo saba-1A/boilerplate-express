@@ -3,6 +3,12 @@ const express = require('express');
 const app = express();
 const path = require('path');
 
+// Root-level logger middleware
+app.use(function(req, res, next) {
+  console.log(`${req.method} ${req.path} - ${req.ip}`);
+  next();
+});
+
 app.use('/public', express.static(__dirname + '/public'));
 
 app.get('/', function(req, res) {
