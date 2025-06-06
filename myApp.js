@@ -1,13 +1,13 @@
 const express = require('express');
 const app = express();
+const path = require('path');
 
-app.get('/', (req, res) => {
-  res.send('Hello Express');
+// Serve the index.html file on GET /
+app.get('/', function(req, res) {
+  res.sendFile(__dirname + '/views/index.html');
 });
 
 module.exports = app;
-
-
 
 
 
