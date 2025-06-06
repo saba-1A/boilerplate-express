@@ -17,8 +17,7 @@ app.get('/now', (req, res, next) => {
   req.time = new Date().toString();
   next();
 }, (req, res) => {
-  res.setHeader('Content-Type', 'application/json');
-  res.send(JSON.stringify({ time: req.time }));
+  res.json({ time: req.time }); //  Use res.json instead of res.send(JSON.stringify(...))
 });
 
 // /json route
