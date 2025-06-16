@@ -1,13 +1,14 @@
 const express = require('express');
 const app = express();
 
-// Step 1: Chain middleware in the /now route
+// 🔗 Chain middleware and final handler in one route
 app.get('/now', (req, res, next) => {
-  req.time = new Date().toString(); // Middleware adds time to req
-  next(); // Move to next handler
+  req.time = new Date().toString(); // Get current time
+  next();
 }, (req, res) => {
-  res.json({ time: req.time }); // Final handler responds with time
+  res.json({ time: req.time }); // Return JSON with time
 });
 
-// Step 2: Export the app so FCC can test it
+// Export app for freeCodeCamp testing
 module.exports = app;
+
