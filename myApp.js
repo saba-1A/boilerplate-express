@@ -1,18 +1,13 @@
-{
-    //myApp.use(enableCORS);
-    app.use('/', myApp);
-    var stack = (myApp._router && myApp._router.stack) || [];
-    var layers = stack.map((l) => l.name);
-.....
+const express = require('express');
+const app = express();
 
-// check if /now route has a middleware before the handler
-    var nowRoute = stack.filter((l) => {
-      if (l.route) {
-        return l.route.path === '/now';
-      }
-      return false;
-    });
-    if (nowRoute.length > 0) {
-      nowRoute = nowRoute[0];
-      globals.nowRouteStackLength = nowRoute.route.stack.length;
-    }
+// Step 1: Chain middleware in the /now route
+app.get('/now', (req, res, next) => {
+  req.time = new Date().toString(); // Middleware adds time to req
+  next(); // Move to next handler
+}, (req, res) => {
+  res.json({ time: req.time }); // Final handler responds with time
+});
+
+// Step 2: Export the app so FCC can test it
+module.exports = app;
