@@ -2,7 +2,7 @@ require('dotenv').config();
 let express = require('express');
 let app = express();
 
-// Middleware logger (optional, used in earlier challenges)
+// Logger middleware (optional)
 app.use((req, res, next) => {
   console.log(`${req.method} ${req.path} - ${req.ip}`);
   next();
@@ -11,13 +11,12 @@ app.use((req, res, next) => {
 // Chained middleware for /now
 app.get("/now",
   (req, res, next) => {
-    req.time = new Date().toUTCString(); // Use UTC format for FCC test
+    req.time = new Date().toString(); // 👈 Use this format for FCC
     next();
   },
   (req, res) => {
-    res.json({ time: req.time }); // JSON response with time
+    res.json({ time: req.time });
   }
 );
 
-// Export the app (needed by server.js)
 module.exports = app;
