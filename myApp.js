@@ -1,19 +1,15 @@
 var express = require('express');
 var app = express();
-const bodyParser = require('body-parser'); // ✅
 
-app.use((req, res, next) => {
- console.log(req.method + " " + req.path + " - " + req.ip); 
- next();
-});
+/** 8) Chaining middleware. A Time server */
 
-app.use(bodyParser.urlencoded({ extended: false })); // ✅
-
-...
-
-app.get('/now', function(req, res, next){
-  req.time = new Date().toString(); // ✅ Add time here
-  next();  
+app.get('/now', function(req, res, next) {
+  req.time = new Date().toString(); // ✅ Add current time to request object
+  next(); // ✅ Pass control to next function
 }, function(req, res) {
-  res.json({ time: req.time }); // ✅ Return JSON
+  res.json({ time: req.time }); // ✅ Respond with time in JSON format
 });
+
+//---------- DO NOT EDIT BELOW THIS LINE --------------------
+module.exports = app;
+s
