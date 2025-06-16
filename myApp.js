@@ -1,22 +1,18 @@
-require('dotenv').config();
-let express = require('express');
-let app = express();
+{
+    //myApp.use(enableCORS);
+    app.use('/', myApp);
+    var stack = (myApp._router && myApp._router.stack) || [];
+    var layers = stack.map((l) => l.name);
+.....
 
-// Logger middleware (optional)
-app.use((req, res, next) => {
-  console.log(`${req.method} ${req.path} - ${req.ip}`);
-  next();
-});
-
-// Chained middleware for /now
-app.get("/now",
-  (req, res, next) => {
-    req.time = new Date().toString(); // 👈 Use this format for FCC
-    next();
-  },
-  (req, res) => {
-    res.json({ time: req.time });
-  }
-);
-
-module.exports = app;
+// check if /now route has a middleware before the handler
+    var nowRoute = stack.filter((l) => {
+      if (l.route) {
+        return l.route.path === '/now';
+      }
+      return false;
+    });
+    if (nowRoute.length > 0) {
+      nowRoute = nowRoute[0];
+      globals.nowRouteStackLength = nowRoute.route.stack.length;
+    }
